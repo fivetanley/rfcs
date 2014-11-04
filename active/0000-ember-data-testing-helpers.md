@@ -49,18 +49,17 @@ describe("settings page", function(){
 	    return visit('/settings');
 	  });
 	  it("shows the credit cards", function(){
-      assert.equal(find(".spec-credit-cards").length, 4);
+	assert.equal(find(".spec-credit-cards").length, 4);
 	  });
 	});
 
 
   describe("when the user does not have payment access", function(){
-    describe("when the user has payment access", function(){
       beforeEach(function(){
         this.server.get('/api_settings', function(){
           var statusCode = 200;
           var headers = {"Content-Type": "application/json"};
-          var settingsResponse = {user: {has_access: true}};
+          var settingsResponse = {user: {has_access: false}};
           return [statusCode, headers, JSON.stringify(settingsResponse)];
         });
         return visit('/settings');
@@ -69,7 +68,6 @@ describe("settings page", function(){
         assert.equal(find(".spec-credit-cards").length, 0);
       });
     });
-  });
 });
 ```
 
@@ -90,13 +88,13 @@ describe("settings page", function(){
         assert.equal(find(".spec-credit-cards").length, 4);
     });
   });
-  describe("when the user has payment access", function(){
+  describe("when the user does not have payment access", function(){
     beforeEach(function(){
       getRecordById('user', 1).set('hasAccess', false);
       return visit('/settings');
     });
     it("shows the credit cards", function(){
-      assert.equal(find(".spec-credit-cards").length, 4);
+      assert.equal(find(".spec-credit-cards").length, 0);
     });
   });
 });
@@ -107,7 +105,7 @@ describe("settings page", function(){
 ## Move FixtureAdapter to its own repository and bower repo
 
 This allows people relying on the FixtureAdapter to continue using it. Perhaps
-the FixtureAdapter itself will find a new steward such as @kurko has taken over
+the FixtureAdapter itself will find a new steward such as @kurko who has taken over
 the LocalStorage, IndexedDB, and JSONAPI adapters.
 
 ## Make a public test helper for public methods on the store
@@ -122,7 +120,7 @@ name proposals for the current [public store API][ember-data-public-api]:
 * `deleteRecord(record)` - `store.deleteRecord(record)`
 * `findRecord(type, id, preload)` - `store.find(type, id, preload)`
 * `getRecordById(type, id)` - `store.getById(type, id)`
-* `hasRecordForId)type, id)`- `store.hasRecordForId(type, id)`
+* `hasRecordForId(type, id)`- `store.hasRecordForId(type, id)`
 * `metaForRecordType(type, metadata)` - `store.metaForType(type, metadata)`
 * `metadataForRecordType(type)` - `store.metadataFor(type)`
 * `normalizePayload(type, payload)` - `store.normalize(type, payload)`
